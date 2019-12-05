@@ -33,16 +33,18 @@ class Router implements RouterInterface
 
             $pattern = preg_replace_callback('/\{([^\}]+)\}/',function($match) use ($route) {
                 $token = '[^\}]+';
-                $param = $match[1];
+                $param = $match[1]; // 'id'
                 if (array_key_exists($param, $route->getConstraints())) {
                     $token = $route->getConstraints()[$param];
                 }
                 return '(?P<'. $param . '>' . $token . ')';
             }, $route_path);
+
             if (preg_match('~^' . $pattern . '$~i', $request_path, $matches)) {
                 $this->dispatchMiddlewares($route, $request);
+                $matches = array_filter($matches, '\is_string', ARRAY_FILTER_USE_KEY);
+                $resolved = $this->resolver->getController($route, $matches);
 
-                $resolved = $this->resolver->getController($route);
                 return $resolved;
             }
         }
@@ -61,7 +63,7 @@ class Router implements RouterInterface
         }
     }
 
-    private function getUrlWithoutSlash()
+    private function getRouteParams()
     {
 
     }

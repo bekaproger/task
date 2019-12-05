@@ -19,7 +19,7 @@ class ControllerResolver
         $this->request = $request;
     }
 
-    public function getController(Route $route) : ResolvedController
+    public function getController(Route $route, array $params = []) : ResolvedController
     {
         $arguments = [];
 
@@ -45,7 +45,7 @@ class ControllerResolver
                 throw new \Exception('Method ' . $exploded[0] . " does not exist in $controller_class");
             }
 
-            $arguments = $this->resolveControllerMethod($controller_class, $exploded[1]);
+            $arguments = $this->resolveControllerMethod($controller_class, $exploded[1], $params);
 
             return new ResolvedController($instance, $exploded[1], $arguments);
         }
@@ -64,24 +64,24 @@ class ControllerResolver
         throw new \Exception("Dir $dir does not exist");
     }
 
-    protected function resolveControllerMethod(string $controller_class, string $method )
+    protected function resolveControllerMethod(string $controller_class, string $method, $params )
     {
         $reflection = new \ReflectionMethod($controller_class, $method);
 
-        $params = $reflection->getParameters();
+        $parameters = $reflection->getParameters();
 
         $arguments = [];
 
         /**
          * @var $parameter \ReflectionParameter
          */
-        foreach ($params as $parameter) {
+        foreach ($parameters as $parameter) {
             if ($paramClass = $parameter->getClass()) {
                 $arguments[] = $this->container->get($paramClass->getName());
-            } elseif ($parameter->isArray()) {
-                $arguments[] = [];
             } else {
-                if ($parameter->isDefaultValueAvailable()) {
+                if (isset($params[$parameter->getName()])) {
+                    $arguments[] = $params[$parameter->getName()];
+                } elseif ($parameter->isDefaultValueAvailable()) {
                     $arguments[] = $parameter->getDefaultValue();
                 } else {
                     throw new \Exception('Unable to resolve "' . $parameter->getName() . '"" in service "' . $controller_class . '"');

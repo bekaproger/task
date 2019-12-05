@@ -29,7 +29,7 @@ $container = new Container($definitions);
 $app = $container->get(Application::class);
 $router = $container->get(RouteProxy::class);
 
-$router->get('{any}', 'SampleController@index')->where(['any' => '.*']);
+$router->get('/{any}/', 'SampleController@index')->where(['any' => '.*']);
 
 $app->handle($request);
 
