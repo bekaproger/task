@@ -5,7 +5,6 @@ namespace Calc;
 
 use Calc\Http\Router\Interfaces\ResolvedControllerInterface;
 use Calc\Http\Router\Interfaces\RouterInterface;
-use Calc\Http\Router\RouteProxy;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Application

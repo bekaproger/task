@@ -45,12 +45,6 @@ class Router implements RouterInterface
 
                 $resolved = $this->resolver->getController($route);
                 return $resolved;
-
-//                return new Result(
-//                    $route->getPattern(),
-//                    $route->getHandler(),
-//                    array_filter($matches, '\is_string', ARRAY_FILTER_USE_KEY)
-//                );
             }
         }
 

@@ -3,8 +3,6 @@
 
 namespace Calc\Container;
 
-
-use Calc\Http\Router\Interfaces\Router;
 use Psr\Container\ContainerInterface;
 
 class Container implements ContainerInterface
@@ -30,8 +28,10 @@ class Container implements ContainerInterface
         $definition = $this->definitions[$id];
         if ($definition instanceof \Closure) {
             $this->results[$id] = $definition($this);
+        } else if (is_string($definition)) {
+            $this->results[$id] = $this->resolveClass($definition);
         } else {
-            $this->results[$id] = $definition;
+            throw new \Exception("Can't resolve class $id.");
         }
         return $this->results[$id];
     }
@@ -39,6 +39,9 @@ class Container implements ContainerInterface
     protected function resolveClass ($id)
     {
         if (class_exists($id)) {
+            if ($id === self::class) {
+                return $this;
+            }
             $reflection = new \ReflectionClass($id);
             $arguments = [];
             if (($constructor = $reflection->getConstructor()) !== null) {
