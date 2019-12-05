@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Calc\Http\Router;
+namespace Lil\Http\Router;
 
-use Calc\Http\Router\Interfaces\RouteProxyInterface;
+use Lil\Http\Router\Interfaces\RouteProxyInterface;
 
-use Calc\Http\Router\Interfaces\RouteInterface;
+use Lil\Http\Router\Interfaces\RouteInterface;
 
 class RouteProxy implements RouteProxyInterface
 {

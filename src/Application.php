@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Calc;
+namespace Lil;
 
-use Calc\Http\Router\Interfaces\ResolvedControllerInterface;
-use Calc\Http\Router\Interfaces\RouterInterface;
+use Lil\Http\Router\Interfaces\ResolvedControllerInterface;
+use Lil\Http\Router\Interfaces\RouterInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Application

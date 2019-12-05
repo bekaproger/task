@@ -1,10 +1,8 @@
 <?php
 
 
-namespace Calc\Http\Router\Interfaces;
+namespace LilHttp\Router\Interfaces;
 
-
-use Psr\Http\Message\ServerRequestInterface;
 
 interface ControllerResolverInterface
 {

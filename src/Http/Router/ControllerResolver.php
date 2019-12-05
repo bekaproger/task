@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Calc\Http\Router;
+namespace Lil\Http\Router;
 
 
 use Psr\Container\ContainerInterface;
@@ -81,10 +81,7 @@ class ControllerResolver
             } elseif ($parameter->isArray()) {
                 $arguments[] = [];
             } else {
-                $param_name = $parameter->getName();
-                if (isset($this->request->getQueryParams()[$param_name])) {
-                    $arguments[] = $this->request->getQueryParams()[$param_name];
-                } else if ($parameter->isDefaultValueAvailable()) {
+                if ($parameter->isDefaultValueAvailable()) {
                     $arguments[] = $parameter->getDefaultValue();
                 } else {
                     throw new \Exception('Unable to resolve "' . $parameter->getName() . '"" in service "' . $controller_class . '"');

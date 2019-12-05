@@ -4,6 +4,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
+use Lil\Http\Router\Interfaces\RouterInterface;
+use Lil\Http\Router\Router;
+use Lil\Application;
+use Lil\Http\Router\RouteProxy;
+use Lil\Container\Container;
 
 require_once '../vendor/autoload.php';
 
@@ -13,16 +18,16 @@ $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory
 $request = $psrHttpFactory->createRequest($request);
 
 $definitions = [
-    Calc\Http\Router\Interfaces\RouterInterface::class => \Calc\Http\Router\Router::class,
-    Psr\Container\ContainerInterface::class => Calc\Container\Container::class,
+    RouterInterface::class => Router::class,
+    Psr\Container\ContainerInterface::class => Container::class,
     ServerRequestInterface::class => function ($container) use ($request) {
         return $request;
     }
 ];
 
-$container = new \Calc\Container\Container($definitions);
-$app = $container->get(\Calc\Application::class);
-$router = $container->get(\Calc\Http\Router\RouteProxy::class);
+$container = new Container($definitions);
+$app = $container->get(Application::class);
+$router = $container->get(RouteProxy::class);
 
 $router->get('{any}', 'SampleController@index')->where(['any' => '.*']);
 

@@ -1,10 +1,9 @@
 <?php
 
 
-namespace Calc\Http\Router;
+namespace Lil\Http\Router;
 
-use Calc\Http\Router\ControllerResolver;
-use Calc\Http\Router\Interfaces\RouterInterface;
+use Lil\Http\Router\Interfaces\RouterInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Router implements RouterInterface

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Calc\Http\Router\Interfaces;
+namespace Lil\Http\Router\Interfaces;
 
 
-use Calc\Http\Router\Interfaces\RouteInterface;
+use Lil\Http\Router\Interfaces\RouteInterface;
 
 interface RouteProxyInterface
 {
