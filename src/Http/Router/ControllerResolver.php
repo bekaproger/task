@@ -5,15 +5,18 @@ namespace Calc\Http\Router;
 
 
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class ControllerResolver
 {
+    protected $request;
 
     protected $container;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, ServerRequestInterface $request)
     {
         $this->container = $container;
+        $this->request = $request;
     }
 
     public function getController(Route $route) : ResolvedController
@@ -78,10 +81,14 @@ class ControllerResolver
             } elseif ($parameter->isArray()) {
                 $arguments[] = [];
             } else {
-                if (!$parameter->isDefaultValueAvailable()) {
+                $param_name = $parameter->getName();
+                if (isset($this->request->getQueryParams()[$param_name])) {
+                    $arguments[] = $this->request->getQueryParams()[$param_name];
+                } else if ($parameter->isDefaultValueAvailable()) {
+                    $arguments[] = $parameter->getDefaultValue();
+                } else {
                     throw new \Exception('Unable to resolve "' . $parameter->getName() . '"" in service "' . $controller_class . '"');
                 }
-                $arguments[] = $parameter->getDefaultValue();
             }
         }
 
