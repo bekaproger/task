@@ -29,7 +29,7 @@ $container = new \Calc\Container\Container($definitions);
 $app = $container->get(\Calc\Application::class);
 $router = $container->get(\Calc\Http\Router\RouteProxy::class);
 
-$router->get('/', 'SampleController@index');
+$router->get('{any}', 'SampleController@index')->where(['any' => '.*']);
 
 $app->handle($request);
 
