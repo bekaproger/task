@@ -13,14 +13,9 @@ $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory
 $request = $psrHttpFactory->createRequest($request);
 
 $definitions = [
-    \Calc\Http\Router\Interfaces\RouterInterface::class => function(\Psr\Container\ContainerInterface $container) {
-        return $container->get(\Calc\Http\Router\Router::class);
-    },
-    \Psr\Container\ContainerInterface::class => function(\Psr\Container\ContainerInterface $container) {
-        return $container;
-    },
-
-    ServerRequestInterface::class => function(\Calc\Container\Container $container) use ($request) {
+    Calc\Http\Router\Interfaces\RouterInterface::class => \Calc\Http\Router\Router::class,
+    Psr\Container\ContainerInterface::class => Calc\Container\Container::class,
+    ServerRequestInterface::class => function ($container) use ($request) {
         return $request;
     }
 ];
