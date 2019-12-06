@@ -20,11 +20,16 @@ class Router implements RouterInterface
 
     public function match(ServerRequestInterface $request)
     {
+        $method = $request->getMethod();
+        if (strtoupper($request->getMethod()) === 'POST'){
+            $method = $this->getMethodFromForm($request);
+        }
+
         /**
          * @var $route Route
          */
         foreach ($this->routes->getRoutes() as $route) {
-            if (!in_array(strtoupper($request->getMethod()), $route->getMethods())) {
+            if (!in_array($method, $route->getMethods())) {
                 continue;
             }
 
@@ -68,16 +73,26 @@ class Router implements RouterInterface
 
     }
 
+    private function getMethodFromForm(ServerRequestInterface $request)
+    {
+        $body = $request->getParsedBody();
+        if (!empty($body)) {
+            if (is_object($body)) {
+                if (property_exists($body, '_method'))  {
+                    return $body->{'_method'};
+                }
+            } else {
+                if (isset($body['_method'])) {
+                    return $body['_method'];
+                }
+            }
+        }
+
+        return $request->getMethod();
+    }
+
     private function dropSlashes(string $path)
     {
-        if (strpos($path, '/') === 0) {
-            $path = substr($path, 1);
-        }
-
-        if (strrpos($path, '/') === strlen($path) - 1) {
-            $path = substr($path, 0, -1);
-        }
-
-        return $path;
+        return trim(trim($path, ' '), '/');
     }
 }

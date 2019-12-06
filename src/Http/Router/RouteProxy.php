@@ -33,6 +33,31 @@ class RouteProxy implements RouteProxyInterface
         return $this->addRoute(['POST'], $pattern, $handler);
     }
 
+    public function put(string $pattern, $handler): RouteInterface
+    {
+        return $this->addRoute(['PUT'], $pattern, $handler);
+    }
+
+    public function delete(string $pattern, $handler): RouteInterface
+    {
+        return $this->addRoute(['DELETE'], $pattern, $handler);
+    }
+
+    public function head(string $pattern, $handler): RouteInterface
+    {
+        return $this->addRoute(['HEAD'], $pattern, $handler);
+    }
+
+    public function options(string $pattern, $handler): RouteInterface
+    {
+        return $this->addRoute(['OPTIONS'], $pattern, $handler);
+    }
+
+    public function patch(string $pattern, $handler): RouteInterface
+    {
+        return $this->addRoute(['PATCH'], $pattern, $handler);
+    }
+
     public function name(string $name): RouteProxyInterface
     {
         return $this;
