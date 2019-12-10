@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Lil\Http\Router;
+namespace Lil\Router;
 
 
-use Lil\Http\Router\Interfaces\RouteInterface;
+use Lil\Router\Interfaces\RouteInterface;
 
 class Route implements RouteInterface
 {
@@ -37,7 +37,7 @@ class Route implements RouteInterface
 
     public function getPattern()
     {
-        return $this->pattern;
+        return trim($this->pattern, '/');
     }
 
     public function getIdentifier()

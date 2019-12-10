@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Lil\Http\Request;
 
 class SampleController
 {
-    public function index (ServerRequestInterface $request)
+    public function index (Request $request)
     {
-        echo 'You are here - ' . $request->getUri()->getPath();
+        echo 'You are here - ' . $request->path();
     }
 }

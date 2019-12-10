@@ -1,7 +1,7 @@
 <?php
 
 
-namespace LilHttp\Router\Interfaces;
+namespace Lil\Router\Interfaces;
 
 
 interface ControllerResolverInterface

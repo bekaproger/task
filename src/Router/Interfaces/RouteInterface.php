@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Lil\Http\Router\Interfaces;
+namespace Lil\Router\Interfaces;
 
 
 interface RouteInterface

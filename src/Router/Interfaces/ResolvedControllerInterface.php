@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Lil\Http\Router\Interfaces;
+namespace Lil\Router\Interfaces;
 
 
-use Psr\Http\Message\ServerRequestInterface;
+use Lil\Http\Request;
 
 interface ResolvedControllerInterface
 {
@@ -23,5 +23,5 @@ interface ResolvedControllerInterface
      */
     public function getMethod(): string;
 
-    public function execute(ServerRequestInterface $request);
+    public function execute(Request $request);
 }

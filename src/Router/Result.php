@@ -1,12 +1,11 @@
 <?php
 
 
-namespace Lil\Http\Router;
+namespace Lil\Router;
 
 
 class Result
 {
-
     private $handler;
 
     private $name;

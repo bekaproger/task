@@ -1,17 +1,16 @@
 <?php
 
 
-namespace Lil\Http\Router;
+namespace Lil\Router;
 
-use Lil\Http\Router\Interfaces\RouteProxyInterface;
-
-use Lil\Http\Router\Interfaces\RouteInterface;
+use Lil\Router\Interfaces\RouteProxyInterface;
+use Lil\Router\Interfaces\RouteInterface;
 
 class RouteProxy implements RouteProxyInterface
 {
-    private $rout_counter = 0;
+    protected $routes;
 
-    private $routes;
+    protected $stack;
 
     public function __construct(RouteCollection $routes)
     {
@@ -25,7 +24,8 @@ class RouteProxy implements RouteProxyInterface
 
     public function get(string $pattern, $handler): RouteInterface
     {
-        return $this->addRoute(['GET'], $pattern, $handler);
+        $route =  $this->addRoute(['GET'], $pattern, $handler);
+        return $route;
     }
 
     public function post(string $pattern, $handler): RouteInterface
@@ -63,9 +63,15 @@ class RouteProxy implements RouteProxyInterface
         return $this;
     }
 
-    public function group(callable  $function): RouteProxyInterface
+    public function group(array $options, callable  $function)
     {
-        return $this;
+        $this->routes->addStack($options);
+
+        $function($this);
+
+        $this->routes->popStack();
+
+        return null;
     }
 
     public function middleware(callable $middleware): RouteProxyInterface

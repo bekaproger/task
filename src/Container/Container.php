@@ -3,7 +3,6 @@
 
 namespace Lil\Container;
 
-use Psr\Container\ContainerInterface;
 
 class Container implements ContainerInterface
 {
@@ -75,10 +74,5 @@ class Container implements ContainerInterface
             unset($this->results[$id]);
         }
         $this->definitions[$id] = $value;
-    }
-
-    public function getSingleton($id)
-    {
-        return $this->resolveClass($id);
     }
  }

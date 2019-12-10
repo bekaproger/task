@@ -1,11 +1,11 @@
 <?php
 
 
-namespace Lil\Http\Router;
+namespace Lil\Router;
 
 
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Lil\Container\ContainerInterface;
+use Lil\Http\Request;
 
 class ControllerResolver
 {
@@ -13,7 +13,7 @@ class ControllerResolver
 
     protected $container;
 
-    public function __construct(ContainerInterface $container, ServerRequestInterface $request)
+    public function __construct(ContainerInterface $container, Request $request)
     {
         $this->container = $container;
         $this->request = $request;

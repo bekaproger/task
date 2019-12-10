@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Lil\Http\Router;
+namespace Lil\Router;
 
-use Lil\Http\Router\Interfaces\RouterInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Lil\Router\Interfaces\RouterInterface;
+use Lil\Http\Request;
 
 class Router implements RouterInterface
 {
@@ -18,7 +18,7 @@ class Router implements RouterInterface
         $this->resolver = $resolver;
     }
 
-    public function match(ServerRequestInterface $request)
+    public function match(Request $request)
     {
         $method = $request->getMethod();
         if (strtoupper($request->getMethod()) === 'POST'){
@@ -33,8 +33,8 @@ class Router implements RouterInterface
                 continue;
             }
 
-            $request_path = $this->dropSlashes($request->getUri()->getPath());
-            $route_path = $this->dropSlashes($route->getPattern());
+            $request_path = $request->path();
+            $route_path = $route->getPattern();
 
             $pattern = preg_replace_callback('/\{([^\}]+)\}/',function($match) use ($route) {
                 $token = '[^\}]+';
@@ -57,7 +57,7 @@ class Router implements RouterInterface
         throw new \Exception('404');
     }
 
-    private function dispatchMiddlewares (Route $route, ServerRequestInterface $request)
+    private function dispatchMiddlewares (Route $route, Request $request)
     {
         foreach ($this->routes->getMiddlewares() as $middleware) {
             $middleware($request);
@@ -68,14 +68,9 @@ class Router implements RouterInterface
         }
     }
 
-    private function getRouteParams()
+    private function getMethodFromForm(Request $request)
     {
-
-    }
-
-    private function getMethodFromForm(ServerRequestInterface $request)
-    {
-        $body = $request->getParsedBody();
+        $body = $request->getContent();
         if (!empty($body)) {
             if (is_object($body)) {
                 if (property_exists($body, '_method'))  {

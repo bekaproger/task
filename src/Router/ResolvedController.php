@@ -1,10 +1,10 @@
 <?php
 
 
-namespace Lil\Http\Router;
+namespace Lil\Router;
 
 
-use Psr\Http\Message\ServerRequestInterface;
+use Lil\Http\Request;
 
 class ResolvedController
 {
@@ -21,7 +21,7 @@ class ResolvedController
         $this->method = $method;
     }
 
-    public function execute(ServerRequestInterface $request)
+    public function execute(Request $request)
     {
         if ($this->controller instanceof \Closure) {
            return call_user_func($this->controller, $request);

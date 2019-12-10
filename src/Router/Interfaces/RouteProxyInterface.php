@@ -1,10 +1,8 @@
 <?php
 
 
-namespace Lil\Http\Router\Interfaces;
+namespace Lil\Router\Interfaces;
 
-
-use Lil\Http\Router\Interfaces\RouteInterface;
 
 interface RouteProxyInterface
 {
@@ -14,7 +12,7 @@ interface RouteProxyInterface
 
     public function middleware(callable $middleware): self ;
 
-    public function group(callable $groupFunction): self ;
+    public function group(array $options, callable $groupFunction);
 
     public function name(string $name): self;
 }

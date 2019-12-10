@@ -3,9 +3,9 @@
 
 namespace Lil;
 
-use Lil\Http\Router\Interfaces\ResolvedControllerInterface;
-use Lil\Http\Router\Interfaces\RouterInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Lil\Router\Interfaces\ResolvedControllerInterface;
+use Lil\Router\Interfaces\RouterInterface;
+use Lil\Http\Request;
 
 class Application
 {
@@ -16,7 +16,7 @@ class Application
         $this->router = $router;
     }
 
-    public function handle(ServerRequestInterface $request)
+    public function handle(Request $request)
     {
         try {
             /**
