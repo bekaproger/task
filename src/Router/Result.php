@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Lil\Router;
-
 
 class Result
 {
@@ -12,7 +10,7 @@ class Result
 
     private $params;
 
-    public function __construct($name, $handler, array  $params = [])
+    public function __construct($name, $handler, array $params = [])
     {
         $this->handler = $handler;
         $this->name = $name;

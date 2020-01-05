@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Lil\Router;
 
-
-use Lil\Container\ContainerInterface;
+use Lil\Application;
 use Lil\Http\Request;
 
 class ControllerResolver
@@ -13,13 +11,13 @@ class ControllerResolver
 
     protected $container;
 
-    public function __construct(ContainerInterface $container, Request $request)
+    public function __construct(Application $container, Request $request)
     {
         $this->container = $container;
         $this->request = $request;
     }
 
-    public function getController(Route $route, array $params = []) : ResolvedController
+    public function getController(Route $route, array $params = []): ResolvedController
     {
         $arguments = [];
 
@@ -28,21 +26,20 @@ class ControllerResolver
         }
 
         $exploded = explode('@', $route->getHandler());
-        $controller_class = 'App\\Http\\Controllers\\' . $exploded[0] ;
+        $controller_class = 'App\\Http\\Controllers\\'.$exploded[0];
 
-        if (count($exploded) <> 2) {
-            throw new \Exception('Controller name and class invalid in route ' .$route->getName());
+        if (2 != count($exploded)) {
+            throw new \Exception('Controller name and class invalid in route '.$route->getName());
         }
         if (class_exists($controller_class)) {
-
             try {
                 $instance = $this->container->get($controller_class);
             } catch (\Exception $e) {
-                throw new \Exception("Controller class $controller_class can't be resolveed : " .$e->getMessage());
+                throw new \Exception("Controller class $controller_class can't be resolveed : ".$e->getMessage());
             }
 
             if (!method_exists($instance, $exploded[1])) {
-                throw new \Exception('Method ' . $exploded[0] . " does not exist in $controller_class");
+                throw new \Exception('Method '.$exploded[0]." does not exist in $controller_class");
             }
 
             $arguments = $this->resolveControllerMethod($controller_class, $exploded[1], $params);
@@ -51,20 +48,7 @@ class ControllerResolver
         }
     }
 
-    protected function getControllerDirectory()
-    {
-        $dir = $this->container->get('config.controllers.directory');
-        if (is_dir($dir)) {
-
-            $uppercase_dir = ucwords(str_replace(DIRECTORY_SEPARATOR, ' ', $dir));
-
-            return str_replace(' ', '\\', $uppercase_dir) . '\\';
-        }
-
-        throw new \Exception("Dir $dir does not exist");
-    }
-
-    protected function resolveControllerMethod(string $controller_class, string $method, $params )
+    protected function resolveControllerMethod(string $controller_class, string $method, $params)
     {
         $reflection = new \ReflectionMethod($controller_class, $method);
 
@@ -84,7 +68,7 @@ class ControllerResolver
                 } elseif ($parameter->isDefaultValueAvailable()) {
                     $arguments[] = $parameter->getDefaultValue();
                 } else {
-                    throw new \Exception('Unable to resolve "' . $parameter->getName() . '"" in service "' . $controller_class . '"');
+                    throw new \Exception('Unable to resolve "'.$parameter->getName().'"" in service "'.$controller_class.'"');
                 }
             }
         }

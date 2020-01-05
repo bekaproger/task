@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Lil\Router\Interfaces;
-
 
 use Lil\Http\Request;
 

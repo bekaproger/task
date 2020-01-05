@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Lil\Router;
-
 
 class RouteCollection
 {
@@ -26,7 +24,8 @@ class RouteCollection
         $route = new Route($methods, $this->makePattern($pattern), $handler, self::$route_counter);
         $this->applyStack($route);
         self::$routes[self::$route_counter] = $route;
-        self::$route_counter++;
+        ++self::$route_counter;
+
         return $route;
     }
 
@@ -48,7 +47,7 @@ class RouteCollection
             if (!empty($this->prefix)) {
                 $this->prefix = trim($stack['prefix'], '/');
             } else {
-                $this->prefix .= '/' . trim($stack['prefix'], '/');
+                $this->prefix .= '/'.trim($stack['prefix'], '/');
             }
         }
     }
@@ -71,6 +70,6 @@ class RouteCollection
 
     protected function makePattern($pattern)
     {
-        return $this->prefix . '/' . trim(trim($pattern, ' '), '/');
+        return $this->prefix.'/'.trim(trim($pattern, ' '), '/');
     }
 }

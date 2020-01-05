@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\User;
+use Lil\Http\AbstractController;
 use Lil\Http\Request;
 
-class SampleController
+class SampleController extends AbstractController
 {
-    public function index (Request $request)
+    public function index(Request $request, $any)
     {
-        echo 'You are here - ' . $request->path();
+        $user = $this->getManager()->getRepository(User::class)->find(1);
+
+        return view('index', ['any' => $any]);
     }
 }

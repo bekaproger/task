@@ -1,10 +1,9 @@
 <?php
 
-
 namespace Lil\Router;
 
-
 use Lil\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ResolvedController
 {
@@ -23,12 +22,21 @@ class ResolvedController
 
     public function execute(Request $request)
     {
+        /**
+         * @var $response Response
+         */
+        $response = null;
+
         if ($this->controller instanceof \Closure) {
-           return call_user_func($this->controller, $request);
-        } else if (is_object($this->controller) && is_string($this->method) && method_exists($this->controller, $this->method)) {
-            return $this->controller->{$this->method}(...$this->arguments);
+            $response = call_user_func($this->controller, $request);
+        } elseif (is_object($this->controller) && is_string($this->method) && method_exists($this->controller, $this->method)) {
+            $response = $this->controller->{$this->method}(...$this->arguments);
         }
 
-        throw new \Exception("Controller or handler can't be executed");
+        if (!$response instanceof Response) {
+            throw new \Exception('Controller must return '.Response::class.' object');
+        }
+
+        $response->send();
     }
 }

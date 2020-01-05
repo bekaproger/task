@@ -1,36 +1,22 @@
 <?php
 
-use Lil\Http\Request;
-use Lil\Router\Interfaces\RouterInterface;
-use Lil\Router\Router;
-use Lil\Application;
-use Lil\Router\RouteProxy;
-use Lil\Container\Container;
-use Lil\Container\ContainerInterface;
-
-require_once '../vendor/autoload.php';
-
-$request = Request::createFromGlobals();
-
-$definitions = [
-    RouterInterface::class    => Router::class,
-    ContainerInterface::class => Container::class,
-    Request::class            => function ($container) use ($request) {
-        return $request;
-    }
-];
-
-$container = new Container($definitions);
-$app = $container->get(Application::class);
+require __DIR__ . '/bootstrap.php';
 
 /**
- * @var  $router RouteProxy;
+ * @var  $router Lil\Router\RouteProxy;
  */
-$router = $container->get(RouteProxy::class);
+$router = $app->get(Lil\Router\Interfaces\RouteProxyInterface::class);
 
-$router->get('/{any}/', 'SampleController@index')->where(['any' => '.*']);
+//$router->get('/{any}/', 'SampleController@index')->where(['any' => '.*']);
+$router->get('/','HomeController@index')->middleware('auth');
+$router->get('/login', 'AuthController@loginPage')->middleware('guest');
+$router->post('/login', 'AuthController@login')->middleware('guest');
+$router->post('/register', 'AuthController@register')->middleware('guest');
+$router->get('/register', 'AuthController@registerPage')->middleware('guest');
+$router->post('/logout', 'AuthController@logout')->middleware('auth');
 
 $app->handle($request);
+
 
 
 

@@ -1,13 +1,12 @@
 <?php
 
-
 namespace Lil\Container;
-
 
 class Container implements ContainerInterface
 {
-    private $definitions = [];
-    private $results = [];
+    protected $definitions = [];
+
+    protected $results = [];
 
     public function __construct(array $definitions = [])
     {
@@ -16,6 +15,10 @@ class Container implements ContainerInterface
 
     public function get($id)
     {
+        if (self::class === $id) {
+            return $this;
+        }
+
         if (array_key_exists($id, $this->results)) {
             return $this->results[$id];
         }
@@ -27,23 +30,23 @@ class Container implements ContainerInterface
         $definition = $this->definitions[$id];
         if ($definition instanceof \Closure) {
             $this->results[$id] = $definition($this);
-        } else if (is_string($definition)) {
-            $this->results[$id] = $this->resolveClass($definition);
+        } elseif (is_string($definition)) {
+            $this->results[$id] = $this->get($definition);
+        } elseif (is_object($definition)) {
+            $this->results[$id] = $definition;
         } else {
             throw new \Exception("Can't resolve class $id.");
         }
+
         return $this->results[$id];
     }
 
-    protected function resolveClass ($id)
+    protected function resolveClass($id)
     {
         if (class_exists($id)) {
-            if ($id === self::class) {
-                return $this;
-            }
             $reflection = new \ReflectionClass($id);
             $arguments = [];
-            if (($constructor = $reflection->getConstructor()) !== null) {
+            if (null !== ($constructor = $reflection->getConstructor())) {
                 foreach ($constructor->getParameters() as $parameter) {
                     if ($paramClass = $parameter->getClass()) {
                         $arguments[] = $this->get($paramClass->getName());
@@ -51,21 +54,21 @@ class Container implements ContainerInterface
                         $arguments[] = [];
                     } else {
                         if (!$parameter->isDefaultValueAvailable()) {
-                            throw new \Exception('Unable to resolve "' . $parameter->getName() . '"" in service "' . $id . '"');
+                            throw new \Exception('Unable to resolve "'.$parameter->getName().'"" in service "'.$id.'"');
                         }
                         $arguments[] = $parameter->getDefaultValue();
                     }
                 }
             }
+
             return $reflection->newInstanceArgs($arguments);
         }
-        throw new \Exception('Unknown service "' . $id . '"');
-
+        throw new \Exception('Unknown service "'.$id.'"');
     }
 
     public function has($id): bool
     {
-        return array_key_exists($id, $this->definitions) || class_exists($id);
+        return array_key_exists($id, $this->results);
     }
 
     public function set($id, $value): void
@@ -75,4 +78,4 @@ class Container implements ContainerInterface
         }
         $this->definitions[$id] = $value;
     }
- }
+}

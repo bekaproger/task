@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Lil\Router;
-
 
 use Lil\Router\Interfaces\RouteInterface;
 
@@ -50,27 +48,21 @@ class Route implements RouteInterface
         return $this->handler;
     }
 
-    public function middleware($middleware) : RouteInterface
+    public function middleware($middleware): RouteInterface
     {
         if (is_array($middleware)) {
-            foreach ($middleware as $value) {
-                if (!is_callable($value)) {
-                    throw new \Exception('Middleware must be callable or array of callable');
-                }
-            }
             $this->middlewares = array_merge($this->middlewares, $middleware);
-
-            return $this;
-        } else if (is_callable($middleware)) {
+        } else {
             $this->middlewares[] = $middleware;
-            return $this;
         }
-        throw new \Exception('Middleware must be callable or array of callable');
+
+        return $this;
     }
 
-    public function name(string $name) : RouteInterface
+    public function name(string $name): RouteInterface
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -90,6 +82,7 @@ class Route implements RouteInterface
     public function where(array $constraints): RouteInterface
     {
         $this->constraints = array_merge($this->constraints, $constraints);
+
         return $this;
     }
 

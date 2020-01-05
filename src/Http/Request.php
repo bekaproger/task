@@ -1,12 +1,17 @@
 <?php
 
-
 namespace Lil\Http;
 
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Lil\Session\SessionInterface;
 
 class Request extends SymfonyRequest
 {
+    /**
+     * @var SessionInterface
+     */
+    protected $session;
+
     public function uri()
     {
         return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
@@ -17,5 +22,59 @@ class Request extends SymfonyRequest
         $pattern = trim($this->getPathInfo(), '/');
 
         return $pattern;
+    }
+
+    public function getSession(): SessionInterface
+    {
+        return $this->session;
+    }
+
+    public function setRequestSessionData(int $count = 1, $data = null)
+    {
+        if (!$data) {
+            return;
+        }
+
+        $this->session->set('session_request_data', ['count' => $count, 'data' => $data]);
+    }
+
+    public function removeRequestSessionData()
+    {
+        $this->session->remove('session_request_data');
+    }
+
+    public function decrementRequestSessionData()
+    {
+        $data = $this->session->get('session_request_data', null);
+        if (!$data || empty($data)) {
+            return;
+        }
+
+        if ($data['count'] <= 0) {
+            $this->removeRequestSessionData();
+        } else {
+            $this->setRequestSessionData($data['count'] - 1, $data['data']);
+        }
+    }
+
+    public function getSessionRequestData()
+    {
+        return $this->session->get('session_request_data')['data'] ?? [];
+    }
+
+    public function validationErrors()
+    {
+        if (!empty($data = $this->getSessionRequestData())) {
+            if (array_key_exists('errors', $data)) {
+                return $data['errors'];
+            }
+        }
+
+        return [];
+    }
+
+    public function setValidationErrors(array $errors)
+    {
+        $this->setRequestSessionData(1, ['errors' => $errors]);
     }
 }
