@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-class HomeController
+use Lil\Http\AbstractController;
+
+class HomeController extends AbstractController
 {
     public function index()
     {

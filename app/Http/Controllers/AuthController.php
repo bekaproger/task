@@ -33,6 +33,8 @@ class AuthController extends AbstractController
             return redirect('/');
         }
 
+        $request->setValidationErrors(['email' => 'User not found!']);
+
         return back();
     }
 
@@ -60,14 +62,14 @@ class AuthController extends AbstractController
         $user->setName($name);
         $user->setEmail($email);
         $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
-        $user->setIsAdmin(true);
+        $user->setIsAdmin(false);
         $this->getManager()->persist($user);
 
         $this->getManager()->flush();
 
         $this->auth->register($user);
 
-        return view('index');
+        return redirect('/');
     }
 
     public function logout()

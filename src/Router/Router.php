@@ -55,8 +55,6 @@ class Router implements RouterInterface
                 $matches = array_filter($matches, '\is_string', ARRAY_FILTER_USE_KEY);
                 $resolved = $this->resolver->getController($route, $matches);
 
-                $this->setSessionPreviousUrl($request);
-
                 dispatch(RouteMatchEvent::class);
 
                 return $resolved;
@@ -69,10 +67,6 @@ class Router implements RouterInterface
     private function dispatchMiddlewares(Route $route, Request $request)
     {
         $middlewares = config('middlewares');
-
-        foreach ($this->routes->getMiddlewares() as $middleware) {
-            $middleware($request);
-        }
 
         foreach ($route->getMiddlewares() as $middleware) {
             if (!is_string($middleware) && is_callable($middleware)) {
@@ -90,33 +84,10 @@ class Router implements RouterInterface
 
     private function getMethodFromForm(Request $request)
     {
-        $body = $request->getContent();
-        if (!empty($body)) {
-            if (is_object($body)) {
-                if (property_exists($body, '_method')) {
-                    return $body->{'_method'};
-                }
-            } else {
-                if (isset($body['_method'])) {
-                    return $body['_method'];
-                }
-            }
+        if ($method = $request->request->get('_method', null)) {
+            return $method;
         }
 
         return $request->getMethod();
-    }
-
-    private function dropSlashes(string $path)
-    {
-        return trim(trim($path, ' '), '/');
-    }
-
-    private function setSessionPreviousUrl(Request $request)
-    {
-        $session = $this->app->get('session');
-
-        $session->set('previous_url', $session->get('current_url', null));
-
-        $session->set('current_url', $request->path());
     }
 }

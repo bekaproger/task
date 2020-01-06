@@ -59,27 +59,40 @@ if (!function_exists('lil_str_random')) {
     }
 }
 
-if (!function_exists('view')) {
-    function view($name, array $params = [])
+if (!function_exists('route')) {
+    function route(string $name)
     {
-        ob_start();
+        $routes = (new \Lil\Router\RouteCollection())->getRoutes();
 
-        $filename = app()->getBaseDir().'/views/'.str_replace('.', '/', $name).'.php';
-        require  $filename;
-        unset($filename);
+        /**
+         * @var $route \Lil\Router\Route
+         */
+        foreach ($routes as $route) {
+            if ($route->getName() === $name) {
+                return '/'.$route->getPattern();
+            }
+        }
 
-        extract($params);
-
-        $view = ob_get_contents();
-
-        ob_end_clean();
-
-        return new \Symfony\Component\HttpFoundation\Response($view);
+        throw new \Exception("Route with name $name not found");
     }
 }
 
-if (! function_exists('e')) {
-    function e($val) {
+if (!function_exists('view')) {
+    function view($name, array $params = [], int $status = 200)
+    {
+        ob_start();
+        extract($params);
+        require app()->getBaseDir().'/views/'.str_replace('.', '/', $name).'.php';
+        $view = ob_get_contents();
+        ob_end_clean();
+
+        return new \Symfony\Component\HttpFoundation\Response($view, $status);
+    }
+}
+
+if (!function_exists('e')) {
+    function e($val)
+    {
         echo htmlspecialchars($val);
     }
 }
@@ -102,7 +115,7 @@ if (!function_exists('back')) {
     function back($route = null, int $status = 302)
     {
         if (!$route) {
-            $route = app()->get('session')->get('previous_url', null) ?? app()->get('request')->path();
+            $route = app()->get('session')->getPreviousUrl();
         }
 
         return redirect($route, $status);

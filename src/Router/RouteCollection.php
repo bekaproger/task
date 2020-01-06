@@ -6,8 +6,6 @@ class RouteCollection
 {
     private static $routes = [];
 
-    private static $middlewares = [];
-
     private static $route_counter = 0;
 
     private $stack = [];
@@ -29,22 +27,12 @@ class RouteCollection
         return $route;
     }
 
-    public function addMiddleware(callable $middleware)
-    {
-        self::$middlewares[] = $middleware;
-    }
-
-    public function getMiddlewares()
-    {
-        return self::$middlewares;
-    }
-
     public function addStack(array $stack)
     {
         $this->stack[] = $stack;
 
         if (isset($stack['prefix'])) {
-            if (!empty($this->prefix)) {
+            if (empty($this->prefix)) {
                 $this->prefix = trim($stack['prefix'], '/');
             } else {
                 $this->prefix .= '/'.trim($stack['prefix'], '/');

@@ -73,11 +73,4 @@ class RouteProxy implements RouteProxyInterface
 
         return null;
     }
-
-    public function middleware(callable $middleware): RouteProxyInterface
-    {
-        $this->routes->addMiddleware($middleware);
-
-        return $this;
-    }
 }

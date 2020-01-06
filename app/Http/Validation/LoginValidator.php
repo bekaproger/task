@@ -13,7 +13,9 @@ class LoginValidator extends AbstractValidator
             'email' => function ($email) {
                 return filter_var($email, FILTER_VALIDATE_EMAIL);
             },
-            'password' => 'is_string',
+            'password' => function ($pass) {
+                return is_string($pass) && (strlen($pass) <= 255) && !empty($pass);
+            },
         ];
     }
 

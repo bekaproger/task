@@ -17,11 +17,25 @@ class Request extends SymfonyRequest
         return rtrim(preg_replace('/\?.*/', '', $this->getUri()), '/');
     }
 
+    public function ajax()
+    {
+        return $this->isXmlHttpRequest();
+    }
+
     public function path()
     {
         $pattern = trim($this->getPathInfo(), '/');
 
         return $pattern;
+    }
+
+    public function fullUrl()
+    {
+        $query = $this->getQueryString();
+
+        $question = '/' === $this->getBaseUrl().$this->getPathInfo() ? '/?' : '?';
+
+        return $query ? $this->uri().$question.$query : $this->uri();
     }
 
     public function getSession(): SessionInterface

@@ -15,6 +15,9 @@ class RouteMatchEvent
 
     public function handle()
     {
+        if ('GET' === $this->request->getMethod() && !$this->request->ajax()) {
+            $this->request->getSession()->setPreviousUrl($this->request);
+        }
         $this->request->decrementRequestSessionData();
     }
 }

@@ -8,7 +8,17 @@ interface RouteProxyInterface
 
     public function post(string $path, ?string $handler): RouteInterface;
 
-    public function middleware(callable $middleware): self;
+    public function delete(string $path, ?string $handler): RouteInterface;
+
+    public function put(string $path, ?string $handler): RouteInterface;
+
+    public function options(string $path, ?string $handler): RouteInterface;
+
+    public function patch(string $path, ?string $handler): RouteInterface;
+
+    public function head(string $path, ?string $handler): RouteInterface;
+
+    public function addRoute($methods, $pattern, $handler);
 
     public function group(array $options, callable $groupFunction);
 

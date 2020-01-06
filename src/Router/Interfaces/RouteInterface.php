@@ -10,7 +10,7 @@ interface RouteInterface
 
     public function name(string $name): self;
 
-    public function getName(): string;
+    public function getName(): ?string;
 
     public function getHandler();
 }

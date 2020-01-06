@@ -2,6 +2,7 @@
 
 namespace Lil\Session;
 
+use Lil\Http\Request;
 use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
@@ -40,5 +41,15 @@ class Session extends SymfonySession implements SessionInterface
         }
 
         return self::$instance;
+    }
+
+    public function setPreviousUrl(Request $request): void
+    {
+        $this->set('_previous_url', $request->fullUrl());
+    }
+
+    public function getPreviousUrl(): string
+    {
+        return $this->get('_previous_url');
     }
 }

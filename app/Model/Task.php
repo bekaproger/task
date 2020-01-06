@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Model;
 
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -8,10 +7,10 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="t")
+ * @ORM\Entity(repositoryClass="App\Repositories\TaskRepository")
+ * @ORM\Table(name="tasks")
  */
-class Task
+class Task implements \JsonSerializable
 {
     /**
      * @ORM\Id
@@ -43,10 +42,10 @@ class Task
     /**
      * @ORM\Column(type="boolean", options={"default" : false})
      */
-    private $finished_by_admin;
+    private $edited_by_admin;
 
     /**
-     * @ManyToOne(targetEntity="User", inversedBy="tasks")
+     * @ManyToOne(targetEntity="User", inversedBy="tasks", fetch="EAGER")
      * @JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
@@ -126,17 +125,17 @@ class Task
     /**
      * @return mixed
      */
-    public function getFinishedByAdmin()
+    public function getEditedByAdmin()
     {
-        return $this->finished_by_admin;
+        return $this->edited_by_admin;
     }
 
     /**
-     * @param mixed $finished_by_admin
+     * @param mixed $edited_by_admin
      */
-    public function setFinishedByAdmin($finished_by_admin): void
+    public function setEditedByAdmin($edited_by_admin): void
     {
-        $this->finished_by_admin = $finished_by_admin;
+        $this->edited_by_admin = $edited_by_admin;
     }
 
     /**
@@ -153,5 +152,17 @@ class Task
     public function setUser($user): void
     {
         $this->user = $user;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'username' => $this->getUsername(),
+            'task' => $this->getTask(),
+            'finished' => $this->getFinished(),
+            'edited_by_admin' => $this->getEditedByAdmin(),
+            'user' => $this->getUser()->getId(),
+        ];
     }
 }

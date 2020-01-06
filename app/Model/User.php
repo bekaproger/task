@@ -5,7 +5,6 @@ namespace App\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Lil\Authentication\AuthenticableInterface;
-use Doctrine\ORM\Mapping\OneToMany;
 
 /**
  * @ORM\Entity
@@ -57,7 +56,6 @@ class User implements AuthenticableInterface
             $task->setUser($this);
         }
     }
-
 
     public function getTasks()
     {

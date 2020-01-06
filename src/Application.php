@@ -37,7 +37,7 @@ class Application extends Container implements ApplicationInterface
         } catch (RedirectableException $e) {
             back($e->redirectTo())->send();
         } catch (ValidationException $e) {
-            back($request->path())->send();
+            back()->send();
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
