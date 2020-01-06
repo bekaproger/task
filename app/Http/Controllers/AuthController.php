@@ -62,7 +62,7 @@ class AuthController extends AbstractController
         $user->setName($name);
         $user->setEmail($email);
         $user->setPassword(password_hash($password, PASSWORD_BCRYPT));
-        $user->setIsAdmin(false);
+        $user->setIsAdmin(true);
         $this->getManager()->persist($user);
 
         $this->getManager()->flush();
