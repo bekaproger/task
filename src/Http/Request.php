@@ -71,24 +71,28 @@ class Request extends SymfonyRequest
         }
     }
 
-    public function getSessionRequestData()
+    public function getRequestSessionData($key, $default = null)
     {
-        return $this->session->get('session_request_data')['data'] ?? [];
+        return $this->session->get('session_request_data')['data'][$key] ?? $default;
     }
 
     public function validationErrors()
     {
-        if (!empty($data = $this->getSessionRequestData())) {
-            if (array_key_exists('errors', $data)) {
-                return $data['errors'];
-            }
-        }
-
-        return [];
+        return $this->getRequestSessionData('errors', []);
     }
 
     public function setValidationErrors(array $errors)
     {
         $this->setRequestSessionData(1, ['errors' => $errors]);
+    }
+
+    public function getRequestSessionAlerts()
+    {
+        return $this->getRequestSessionData('alerts', []);
+    }
+
+    public function setRequestSessionAlerts(array $alerts)
+    {
+        $this->setRequestSessionData(1, ['alerts' => $alerts]);
     }
 }

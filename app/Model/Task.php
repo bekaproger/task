@@ -45,12 +45,6 @@ class Task implements \JsonSerializable
     private $edited_by_admin;
 
     /**
-     * @ManyToOne(targetEntity="User", inversedBy="tasks", fetch="EAGER")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
-     */
-    private $user;
-
-    /**
      * @return mixed
      */
     public function getId()
@@ -138,22 +132,6 @@ class Task implements \JsonSerializable
         $this->edited_by_admin = $edited_by_admin;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param mixed $user
-     */
-    public function setUser($user): void
-    {
-        $this->user = $user;
-    }
-
     public function jsonSerialize()
     {
         return [
@@ -161,8 +139,7 @@ class Task implements \JsonSerializable
             'username' => $this->getUsername(),
             'task' => $this->getTask(),
             'finished' => $this->getFinished(),
-            'edited_by_admin' => $this->getEditedByAdmin(),
-            'user' => $this->getUser()->getId(),
+            'edited_by_admin' => $this->getEditedByAdmin()
         ];
     }
 }

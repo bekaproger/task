@@ -2,24 +2,26 @@
 
 namespace App\Http\Middlewares;
 
-use Lil\Authentication\AuthManagerInterface;
-use Lil\Http\AbstractMiddleware;
+use App\Model\User;
+use Lil\Http\RedirectableException;
 use Lil\Http\Request;
+use Lil\Authentication\AuthMiddleware;
 
-class AdminMiddleware extends AbstractMiddleware
+class AdminMiddleware extends AuthMiddleware
 {
-    private $auth;
-
-    public function __construct(AuthManagerInterface $auth)
-    {
-        $this->auth = $auth;
-    }
-
     public function handle(Request $request)
     {
+        /**
+         * @var $user User
+         */
         $user = $this->auth->user();
         if (!($user && $user->getIsAdmin())) {
-            throw new \Exception('Forbidden', 403);
+            throw new RedirectableException('Unauthorized', $this->redirectTo($request));
         }
+    }
+
+    public function redirectTo(Request $request)
+    {
+        return $request->getSession()->getPreviousUrl();
     }
 }

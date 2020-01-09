@@ -2,16 +2,23 @@
 
 <html>
 <head>
-    <meta name="is-authorized" data-is-authorized="<?= auth()->user() ? 1 : 0 ?>">
+    <meta name="is-authorized" data-is-authorized="<?= ($user = auth()->user() && $user->getIsAdmin()) ? 1 : 0 ?>">
 </head>
 <body>
 <div class="container">
-    <div style="display: none;" class="alert alert-primary" role="alert">
+    <div style="display: none;" class="alert alert-primary action-alert" role="alert">
 
     </div>
+
+    <?php  foreach (request()->getRequestSessionAlerts() as $alert) { ?>
+        <div class="alert alert-primary auto-alert" role="alert">
+            <?= $alert ?>
+        </div>
+    <?php } ?>
+
     <div class="row">
         <div class="col-md-3">
-            <p> Hello <?php auth()->user() ?  e(auth()->user()->getName()) : '' ?></p>
+            <p> Hello <?php $user ?  e(auth()->user()->getName()) : '' ?></p>
             <?php if (auth()->user()) {?>
             <form action="/logout" method="POST">
                 <input class="btn btn-primary" type="submit" value="logout">
@@ -97,8 +104,12 @@
   $(document).ready(function () {
     request(1);
 
+    setTimeout(function () {
+      $('.auto-alert').hide()
+    }, 5000);
+
     function showAlert(text) {
-      let alert = $('.alert')
+      let alert = $('.action-alert')
       alert.text(text).show();
       let time = setTimeout(function() {
         alert.text('');

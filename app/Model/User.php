@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Lil\Authentication\AuthenticableInterface;
 
@@ -38,29 +37,6 @@ class User implements AuthenticableInterface
      * @ORM\Column(type="boolean", options={"default":false})
      */
     private $is_admin;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Task", mappedBy="user")
-     */
-    private $tasks;
-
-    public function __construct()
-    {
-        $this->tasks = new ArrayCollection();
-    }
-
-    public function addTask(Task $task)
-    {
-        if (!$this->tasks->contains($task)) {
-            $this->tasks->add($task);
-            $task->setUser($this);
-        }
-    }
-
-    public function getTasks()
-    {
-        return $this->tasks;
-    }
 
     /**
      * @return mixed

@@ -75,7 +75,6 @@ class TaskController extends AbstractController
                 'username' => $task->getUsername(),
                 'email' => $task->getEmail(),
                 'task' => $task->getTask(),
-                'user_id' => $task->getUser()->getId(),
                 'finished' => $task->getFinished(),
                 'edited_by_admin' => $task->getEditedByAdmin(),
             ];
@@ -94,7 +93,6 @@ class TaskController extends AbstractController
     public function store(Request $request, TaskValidator $validator)
     {
         $this->validate($request, $validator);
-        $user = auth()->user();
 
         $task = new Task();
         $task->setEmail($request->request->get('email'));
@@ -102,31 +100,27 @@ class TaskController extends AbstractController
         $task->setTask($request->request->get('task'));
         $task->setFinished(false);
         $task->setEditedByAdmin(false);
-        $task->setUser($user);
 
         $this->getManager()->persist($task);
         $this->getManager()->flush();
 
+        $request->setRequestSessionData(1, ['alerts' => ['Task has been created!']]);
         return redirect('/');
     }
 
     public function finish($id)
     {
-        /**
-         * @var $user User
-         */
         $user = auth()->user();
-
         /**
          * @var $task Task
          */
-        $task = $this->getManager()->getRepository(Task::class)->findOneByUser($user, $id);
+        $task = $this->getManager()->getRepository(Task::class)->find($id);
         if (!$task) {
             return view('404', [], 404);
         }
 
         $task->setFinished(true);
-        if ($user->getIsAdmin()) {
+        if ($user && $user->getIsAdmin()) {
             $task->setEditedByAdmin(true);
         }
 
@@ -145,9 +139,12 @@ class TaskController extends AbstractController
         /**
          * @var $task Task
          */
-        $task = $this->getManager()->getRepository(Task::class)->findOneByUser($user, $id);
+        $task = $this->getManager()->getRepository(Task::class)->find($id);
 
         $task->setFinished(false);
+        if ($user && $user->getIsAdmin()) {
+            $task->setEditedByAdmin(true);
+        }
 
         $this->getManager()->flush();
 
@@ -160,7 +157,7 @@ class TaskController extends AbstractController
         /**
          * @var $task Task
          */
-        $task = $this->getManager()->getRepository(Task::class)->findOneByUser($user, $id);
+        $task = $this->getManager()->getRepository(Task::class)->find($id);
         if (!$task) {
             return view('404', [], 404);
         }
@@ -174,7 +171,7 @@ class TaskController extends AbstractController
     {
         $user = auth()->user();
 
-        $task = $this->getManager()->getRepository(Task::class)->findOneByUser($user, $id);
+        $task = $this->getManager()->getRepository(Task::class)->find($id);
         if (!$task) {
             return view('404', [], 404);
         }
@@ -191,7 +188,7 @@ class TaskController extends AbstractController
         /**
          * @var $task Task
          */
-        $task = $this->getManager()->getRepository(Task::class)->findOneByUser($user, $id);
+        $task = $this->getManager()->getRepository(Task::class)->find($id);
 
         if (!$task) {
             return view('404', [], 404);
@@ -200,7 +197,7 @@ class TaskController extends AbstractController
         $task->setEmail($request->request->get('email'));
         $task->setUsername($request->request->get('username'));
         $task->setTask($request->request->get('task'));
-        if ($user->getIsAdmin()) {
+        if ($user && $user->getIsAdmin()) {
             $task->setEditedByAdmin(true);
         }
 

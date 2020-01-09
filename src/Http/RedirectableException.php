@@ -6,9 +6,9 @@ class RedirectableException extends \Exception
 {
     private $redirectTo;
 
-    public function __construct(string $message = '', $redirectTo)
+    public function __construct(string $message, $redirectTo, $status=302)
     {
-        parent::__construct($message);
+        parent::__construct($message, $status);
 
         $this->redirectTo = $redirectTo;
     }
