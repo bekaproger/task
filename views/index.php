@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <meta name="is-authorized" data-is-authorized="<?= ($user = auth()->user() && $user->getIsAdmin()) ? 1 : 0 ?>">
+    <meta name="is-authorized" data-is-authorized="<?= (($user = auth()->user()) && $user->getIsAdmin()) ? 1 : 0 ?>">
 </head>
 <body>
 <div class="container">
