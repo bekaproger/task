@@ -201,7 +201,7 @@
         clone.children('.task').text(task.task)
         clone.children('.email').text(task.email)
         clone.children('.username').text(task.username)
-        clone.children('.edited_by_admin').text(task.edited_by_admin ? 'Да' : 'Нет')
+        clone.children('.edited_by_admin').text(task.edited_by_admin ? 'Yes' : 'No')
         finished_btn = clone.children('.finished').children('.finish-btn');
         finished_btn.attr('data-current-page', current)
         if (task.finished) {

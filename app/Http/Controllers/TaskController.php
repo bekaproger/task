@@ -169,8 +169,6 @@ class TaskController extends AbstractController
 
     public function edit($id)
     {
-        $user = auth()->user();
-
         $task = $this->getManager()->getRepository(Task::class)->find($id);
         if (!$task) {
             return view('404', [], 404);
@@ -204,6 +202,7 @@ class TaskController extends AbstractController
         $this->getManager()->persist($task);
         $this->getManager()->flush();
 
+        $request->setRequestSessionData(1, ['alerts' => ['Task has been edited!']]);
         return redirect('/');
     }
 }
