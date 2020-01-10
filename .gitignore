@@ -1,7 +1,7 @@
 # Laravel
 /storage/*.key
 /vendor
-.env
+.env.local
 /nbproject
 Homestead.json
 Homestead.yaml
