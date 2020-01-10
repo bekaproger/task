@@ -1,4 +1,5 @@
 # beejee-test
+Demo : https://bekzod-beejee.herokuapp.com/
 
 <pre>composer install</pre>
 
