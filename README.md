@@ -13,3 +13,5 @@ Run server
 # Used packages :
 
 Doctrine ORM, Symfony HttpFoundation, Symfony DotEnv
+
+Also used my own classes from https://github.com/bekaproger/lil-frame.
