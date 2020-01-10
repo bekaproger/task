@@ -9,3 +9,9 @@ Create database tables:
 
 Run server
 <pre>php -S localhost:8000 -t public/</pre>
+
+# Used packages :
+
+Doctrine ORM
+Symfony HttpFoundation
+Symfony DotEnv
