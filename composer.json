@@ -10,8 +10,7 @@
         "doctrine/orm": "2.7.0",
         "symfony/yaml": "^5.0",
         "symfony/http-foundation": "^5.1@dev",
-        "symfony/dotenv": "^5.1@dev",
-        "league/pipeline": "dev-master"
+        "symfony/dotenv": "^5.1@dev"
     },
     "autoload": {
         "psr-4": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "49416e800a71512a7256cec549793c3d",
+    "content-hash": "1e29571da1d3eb86acb1917bbe7f1c18",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -907,59 +907,6 @@
             "time": "2020-01-04T17:34:07+00:00"
         },
         {
-            "name": "league/pipeline",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/pipeline.git",
-                "reference": "866ae32cfe9561776bd8f1e2d9e770aaca78cbd8"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/pipeline/zipball/866ae32cfe9561776bd8f1e2d9e770aaca78cbd8",
-                "reference": "866ae32cfe9561776bd8f1e2d9e770aaca78cbd8",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "leanphp/phpspec-code-coverage": "^4.2",
-                "phpspec/phpspec": "^4.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "League\\Pipeline\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Frank de Jonge",
-                    "email": "info@frenky.net",
-                    "role": "Author"
-                },
-                {
-                    "name": "Woody Gilk",
-                    "email": "woody.gilk@gmail.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "A plug and play pipeline implementation.",
-            "keywords": [
-                "composition",
-                "design pattern",
-                "pattern",
-                "pipeline",
-                "sequential"
-            ],
-            "time": "2019-10-01T13:29:20+00:00"
-        },
-        {
             "name": "psr/container",
             "version": "dev-master",
             "source": {
@@ -1673,8 +1620,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "symfony/http-foundation": 20,
-        "symfony/dotenv": 20,
-        "league/pipeline": 20
+        "symfony/dotenv": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
