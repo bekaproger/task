@@ -12,6 +12,4 @@ Run server
 
 # Used packages :
 
-Doctrine ORM
-Symfony HttpFoundation
-Symfony DotEnv
+Doctrine ORM, Symfony HttpFoundation, Symfony DotEnv
