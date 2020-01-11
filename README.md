@@ -1,4 +1,6 @@
 # beejee-test
+Demo : https://bekzod-beejee.herokuapp.com/
+Admin login : admin@mail.com 123
 
 <pre>composer install</pre>
 
