@@ -1,4 +1,4 @@
-# beejee-test
+# task-manager
 Demo : https://bekzod-beejee.herokuapp.com/
 Admin login : admin@mail.com 123
 
